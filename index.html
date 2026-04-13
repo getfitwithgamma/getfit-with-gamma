@@ -1,0 +1,575 @@
+
+<style>
+/* Fitness redesign (contenu inchangé) */
+:root{
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --shadow-1: 0 10px 30px rgba(0,0,0,.22);
+  --shadow-2: 0 12px 40px rgba(0,0,0,.30);
+  --bg-0: #070A12;
+  --bg-1: #0B1220;
+  --panel: rgba(255,255,255,.06);
+  --panel-2: rgba(255,255,255,.08);
+  --stroke: rgba(255,255,255,.10);
+  --stroke-2: rgba(255,255,255,.14);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.66);
+  --muted-2: rgba(255,255,255,.52);
+  --accent: #7C5CFF;
+  --accent-2: #20E3B2;
+  --warn: #FFB020;
+  --danger: #FF3D6E;
+
+  /* Compat variables (pour les anciens styles inline déjà présents) */
+  --color-text-primary: var(--text);
+  --color-text-secondary: var(--muted);
+  --color-background-primary: rgba(255,255,255,.04);
+  --color-background-secondary: rgba(255,255,255,.06);
+  --color-border-primary: rgba(255,255,255,.18);
+  --color-border-secondary: rgba(255,255,255,.14);
+  --color-border-tertiary: rgba(255,255,255,.10);
+  --border-radius-md: var(--radius-md);
+  --border-radius-lg: var(--radius-lg);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 700px at 18% 5%, rgba(124,92,255,.32), transparent 60%),radial-gradient(900px 600px at 85% 20%, rgba(32,227,178,.20), transparent 55%),linear-gradient(180deg, var(--bg-0), var(--bg-1));color:var(--text);font-family:var(--font-sans)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");background-size:180px 180px}
+body:after{content:"";position:fixed;inset:-20%;pointer-events:none;opacity:.75;filter:blur(26px);background:radial-gradient(700px 420px at 15% 10%, rgba(124,92,255,.24), transparent 60%),radial-gradient(650px 420px at 85% 20%, rgba(32,227,178,.18), transparent 60%),radial-gradient(520px 360px at 60% 85%, rgba(255,61,110,.10), transparent 60%);animation:ambientMove 18s ease-in-out infinite alternate}
+.root{padding:1.25rem 0 1.75rem;font-family:var(--font-sans)}
+.container{width:min(1040px, calc(100% - 24px));margin:0 auto}
+.hero{position:relative;border:1px solid var(--stroke);border-radius:var(--radius-lg);padding:18px 18px 16px;margin:0 0 14px;background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));box-shadow:var(--shadow-1);overflow:hidden}
+.hero:after{content:"";position:absolute;inset:-40% -10%;background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.22) 50%, transparent 60%);transform:translateX(-30%) rotate(8deg);opacity:.35;animation:shine 7.5s ease-in-out infinite}
+.hero:before{content:"";position:absolute;inset:-2px;background:radial-gradient(700px 260px at 20% 0%, rgba(124,92,255,.35), transparent 55%),radial-gradient(520px 240px at 85% 15%, rgba(32,227,178,.22), transparent 50%);pointer-events:none;filter:saturate(1.1)}
+.hero-inner{position:relative;display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:30px;line-height:1.05;font-weight:900;letter-spacing:.6px;text-transform:uppercase}
+.brand span{display:inline-block;background:linear-gradient(135deg, rgba(124,92,255,1), rgba(32,227,178,1), rgba(255,61,110,1));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 26px rgba(0,0,0,.35))}
+.brand .u{opacity:.95}
+.brand-sub{margin-top:6px;font-size:12px;color:var(--muted-2);letter-spacing:.25px}
+.hero-title{font-size:18px;letter-spacing:.2px;font-weight:650}
+.hero-sub{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.45;max-width:70ch}
+.hero-chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:12px;color:var(--muted);border:1px solid var(--stroke);background:rgba(0,0,0,.18);padding:6px 10px;border-radius:999px}
+.chip strong{color:var(--text);font-weight:650}
+.hero-cta{display:flex;gap:10px;align-items:center}
+.hero-cta .mini{font-size:12px;color:var(--muted);text-align:right;max-width:34ch}
+.hero-icon{width:44px;height:44px;border-radius:14px;border:1px solid var(--stroke-2);background:linear-gradient(135deg, rgba(124,92,255,.25), rgba(32,227,178,.18));display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.hero-icon{position:relative}
+.hero-icon:before{content:"";position:absolute;inset:-7px;border-radius:18px;background:radial-gradient(circle at 30% 20%, rgba(124,92,255,.45), transparent 60%),radial-gradient(circle at 80% 70%, rgba(32,227,178,.28), transparent 55%);opacity:.65;filter:blur(10px);z-index:-1;animation:iconPulse 3.6s ease-in-out infinite}
+.hero-icon svg{opacity:.95}
+.contact-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.contact-pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.14);padding:7px 10px;border-radius:999px;text-decoration:none;transition:transform .12s ease, border-color .15s ease, color .15s ease, background .15s ease}
+.contact-pill:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.20);color:var(--text);background:rgba(0,0,0,.18)}
+.contact-dot{width:8px;height:8px;border-radius:50%}
+.dot-ig{background:linear-gradient(135deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5)}
+.dot-mail{background:linear-gradient(135deg, rgba(124,92,255,1), rgba(32,227,178,1))}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px;position:sticky;top:10px;z-index:5}
+.tab{padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);font-size:13px;cursor:pointer;color:rgba(255,255,255,.92);transition:transform .12s ease, box-shadow .18s ease, border-color .15s ease, color .15s ease, filter .15s ease;backdrop-filter: blur(10px);position:relative;overflow:hidden;background:linear-gradient(135deg, rgba(255,61,110,.22), rgba(214,41,118,.18), rgba(150,47,191,.14))}
+.tab:before{content:"";position:absolute;inset:-55% -25%;background:linear-gradient(120deg, transparent 40%, rgba(255,255,255,.22) 50%, transparent 60%);transform:translateX(-35%) rotate(10deg);opacity:.0;pointer-events:none}
+.tab:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.22);filter:saturate(1.1);box-shadow:0 14px 34px rgba(0,0,0,.28)}
+.tab:hover:before{opacity:.55;animation:shineBtn 1.1s ease}
+.tab.active{background:linear-gradient(135deg, rgba(255,61,110,.42), rgba(214,41,118,.30), rgba(150,47,191,.22));color:var(--text);border-color:rgba(255,255,255,.26);font-weight:850}
+.tab.active{box-shadow:0 10px 24px rgba(0,0,0,.22), 0 0 0 1px rgba(124,92,255,.18) inset}
+.sec{display:none}.sec.on{display:block}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.met{flex:1;min-width:160px;background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));border:1px solid var(--stroke);border-radius:var(--radius-md);padding:12px 12px 11px;box-shadow:0 10px 22px rgba(0,0,0,.18)}
+.met{transform:translateY(0);transition:transform .16s ease, box-shadow .18s ease, border-color .18s ease}
+.met:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,0,0,.28);border-color:rgba(255,255,255,.18)}
+.met-l{font-size:12px;color:var(--muted);margin-bottom:3px}
+.met-v{font-size:20px;font-weight:750;color:var(--text);letter-spacing:.2px}
+.met-s{font-size:11px;color:var(--muted-2);margin-top:2px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));border:1px solid var(--stroke);border-radius:var(--radius-lg);padding:1rem 1.1rem;margin-bottom:12px;box-shadow:var(--shadow-1)}
+.card{position:relative;transform:translateY(0);transition:transform .16s ease, box-shadow .18s ease, border-color .18s ease}
+.card:before{content:"";position:absolute;inset:0;border-radius:var(--radius-lg);padding:1px;background:linear-gradient(135deg, rgba(124,92,255,.35), rgba(32,227,178,.22), rgba(255,61,110,.12));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.35;pointer-events:none}
+.card:hover{transform:translateY(-2px);box-shadow:0 18px 48px rgba(0,0,0,.34);border-color:rgba(255,255,255,.18)}
+.badge{display:inline-block;font-size:11px;padding:4px 10px;border-radius:999px;font-weight:700;margin-bottom:10px;border:1px solid rgba(255,255,255,.14)}
+.bt{background:#EEEDFE;color:#3C3489}
+.bg{background:#E1F5EE;color:#085041}
+.ba{background:#FAEEDA;color:#854F0B}
+.bc{background:#FAECE7;color:#993C1D}
+.bp{background:#FBEAF0;color:#72243E}
+.sep{border:none;border-top:1px solid rgba(255,255,255,.10);margin:10px 0}
+.dr{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.dl{min-width:115px;font-size:13px;font-weight:750;color:var(--muted);padding-top:1px}
+.dc{flex:1;font-size:14px;color:var(--text);line-height:1.55}
+.ds{font-size:12px;color:var(--muted-2);margin-top:2px}
+.tip{font-size:13px;color:var(--muted);line-height:1.65;padding:10px 14px;border-left:3px solid var(--accent);border-radius:12px;background:rgba(124,92,255,.10);border:1px solid rgba(124,92,255,.18);margin-bottom:10px}
+.warn{font-size:13px;color:var(--muted);line-height:1.65;padding:10px 14px;border-left:3px solid var(--warn);border-radius:12px;background:rgba(255,176,32,.10);border:1px solid rgba(255,176,32,.18);margin-bottom:10px}
+.macro-bar{margin-bottom:12px}
+.macro-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;color:var(--text)}
+.bar-bg{background:rgba(255,255,255,.08);border-radius:99px;height:8px;width:100%;border:1px solid rgba(255,255,255,.10)}
+.bar-fill{height:7px;border-radius:99px;transform-origin:left;transform:scaleX(0);animation:barGrow .9s cubic-bezier(.2,.9,.2,1) forwards}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:12px;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:var(--muted);background:rgba(0,0,0,.14)}
+.day-card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);padding:.75rem 1rem;margin-bottom:8px;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.day-card{transform:translateY(0);transition:transform .16s ease, box-shadow .18s ease, border-color .18s ease}
+.day-card:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(0,0,0,.32);border-color:rgba(255,255,255,.18)}
+.day-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.day-name{font-size:14px;font-weight:800;color:var(--text);letter-spacing:.2px}
+.day-type{font-size:11px;padding:2px 8px;border-radius:20px}
+.pill-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.pill{font-size:12px;padding:3px 9px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:var(--text);background:rgba(0,0,0,.12)}
+.phase-block{border-radius:var(--radius-lg);border:1px solid rgba(255,255,255,.10);overflow:hidden;margin-bottom:12px;box-shadow:0 12px 26px rgba(0,0,0,.18)}
+.phase-head{padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.phase-title{font-size:14px;font-weight:850}
+.phase-body{padding:0 14px 12px}
+.prog-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px}
+.prog-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.prog-txt{font-size:13px;color:var(--text);line-height:1.55}
+.btn-send{margin-top:10px;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);font-size:13px;cursor:pointer;background:linear-gradient(135deg, rgba(124,92,255,.26), rgba(32,227,178,.14));color:var(--text);font-weight:750;box-shadow:var(--shadow-1);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.btn-send:hover{box-shadow:var(--shadow-2);transform:translateY(-1px)}
+.btn-send{position:relative;overflow:hidden}
+.btn-send:after{content:"";position:absolute;inset:-60% -30%;background:linear-gradient(120deg, transparent 40%, rgba(255,255,255,.20) 50%, transparent 60%);transform:translateX(-35%) rotate(10deg);opacity:.0;transition:opacity .18s ease}
+.btn-send:hover:after{opacity:.7;animation:shineBtn 1.1s ease}
+.footer-note{margin-top:12px;color:var(--muted-2);font-size:12px;line-height:1.55}
+.footer-contacts{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.section{margin:14px 0}
+.section-h{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+.section-t{font-size:15px;font-weight:900;letter-spacing:.2px;color:var(--text)}
+.section-s{font-size:12px;color:var(--muted);max-width:80ch;line-height:1.55}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.cta-row .btn-send{margin-top:0}
+.cta-row .contact-pill{padding:9px 12px}
+.sur-cta{background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);padding:14px 14px 12px;box-shadow:0 10px 24px rgba(0,0,0,.18);position:relative;overflow:hidden}
+.sur-cta:before{content:"";position:absolute;inset:0;border-radius:var(--radius-lg);padding:1px;background:linear-gradient(135deg, rgba(255,61,110,.30), rgba(214,41,118,.22), rgba(150,47,191,.16));-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.35;pointer-events:none}
+.sur-k{font-size:11px;color:rgba(255,255,255,.88);display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.14);padding:4px 9px;border-radius:999px}
+.sur-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg, rgba(255,61,110,1), rgba(214,41,118,1), rgba(150,47,191,1))}
+.sur-t{margin-top:8px;font-size:14px;font-weight:950;color:var(--text)}
+.sur-p{margin-top:6px;font-size:12px;line-height:1.6;color:var(--muted);max-width:90ch}
+.sticky-cta{position:fixed;left:12px;right:12px;bottom:12px;z-index:20;display:none}
+.sticky-cta-inner{display:flex;gap:10px;align-items:center;justify-content:space-between;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.22);backdrop-filter: blur(12px);padding:10px 10px;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.sticky-cta-txt{font-size:12px;color:var(--muted);line-height:1.25;padding-left:6px}
+.sticky-cta-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sticky-cta-actions .contact-pill{padding:8px 10px}
+.sticky-cta-actions .btn-send{padding:9px 12px}
+
+/* Page entrance */
+.hero,.tabs,.sec.on .row,.sec.on .card,.sec.on .day-card,.sec.on .phase-block{animation:enter .55s ease both}
+.tabs{animation-delay:.04s}
+.sec.on .row{animation-delay:.07s}
+.sec.on .card{animation-delay:.10s}
+.sec.on .day-card{animation-delay:.10s}
+.sec.on .phase-block{animation-delay:.10s}
+
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes barGrow{to{transform:scaleX(1)}}
+@keyframes ambientMove{0%{transform:translate3d(-1.5%, -1%, 0)}100%{transform:translate3d(1.5%, 1.2%, 0)}}
+@keyframes shine{0%,58%{opacity:.0;transform:translateX(-35%) rotate(8deg)}66%{opacity:.35}100%{opacity:0;transform:translateX(35%) rotate(8deg)}}
+@keyframes shineBtn{0%{transform:translateX(-35%) rotate(10deg)}100%{transform:translateX(35%) rotate(10deg)}}
+@keyframes iconPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.85;transform:scale(1.06)}}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  body:after{display:none}
+  .bar-fill{transform:none}
+}
+
+@media (max-width:520px){
+  .brand{font-size:24px}
+  .dl{min-width:0;width:100%}
+  .dr{flex-direction:column;gap:6px}
+  .tabs{top:8px}
+  .hero-cta .mini{text-align:left}
+  .sticky-cta{display:block}
+  .root{padding-bottom:92px}
+}
+</style>
+
+<div class="root">
+  <div class="container">
+    <div class="hero" role="banner" aria-label="Programme fitness">
+      <div class="hero-inner">
+        <div style="flex:1;min-width:280px">
+          <div class="hero-top">
+            <div>
+              <div class="brand" aria-label="Getfit_With_Gamma"><span>Getfit<span class="u">_</span>With<span class="u">_</span>Gamma</span></div>
+              <div class="brand-sub">Training • Nutrition • Progression</div>
+            </div>
+          </div>
+          <div class="hero-title">Programme prise de masse — objectif 75 kg</div>
+          <div class="hero-sub">Nutrition, entraînement, planning hebdo et phases de progression.</div>
+          <div class="contact-row" aria-label="Coordonnées">
+            <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+              <span class="contact-dot dot-ig" aria-hidden="true"></span>
+              Instagram: <strong style="color:inherit">@getfit_with_gamma</strong>
+            </a>
+            <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+              <span class="contact-dot dot-mail" aria-hidden="true"></span>
+              Email: <strong style="color:inherit">getfit.with.gamma@gmail.com</strong>
+            </a>
+          </div>
+          <div class="hero-chiprow">
+            <span class="chip"><strong>F</strong> · 27 ans</span>
+            <span class="chip"><strong>170</strong> cm</span>
+            <span class="chip"><strong>62 → 75</strong> kg</span>
+            <span class="chip"><strong>18–24</strong> mois</span>
+          </div>
+        </div>
+        <div class="hero-cta">
+          <div class="mini">Focus: surcharge progressive + surplus calorique contrôlé.</div>
+          <div class="hero-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M7 7h2v10H7V7Zm8 0h2v10h-2V7Z" stroke="rgba(255,255,255,.92)" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M4 9h3m0 6H4m16-6h-3m0 6h3" stroke="rgba(255,255,255,.82)" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M9 9h6m-6 6h6" stroke="rgba(255,255,255,.55)" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+<h2 class="sr-only">Programme de prise de masse musculaire pour atteindre 75 kg, adapté à une femme de 27 ans, 170 cm, 62 kg.</h2>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('profil',this)">Objectif</button>
+  <button class="tab" onclick="show('nutri',this)">Nutrition</button>
+  <button class="tab" onclick="show('sport',this)">Entraînement</button>
+  <button class="tab" onclick="show('planning',this)">Planning</button>
+  <button class="tab" onclick="show('phases',this)">Phases</button>
+</div>
+
+<div class="sec on" id="s-profil">
+  <div class="row">
+    <div class="met"><div class="met-l">Poids actuel</div><div class="met-v">62 kg</div><div class="met-s">IMC 21.5</div></div>
+    <div class="met"><div class="met-l">Objectif</div><div class="met-v">75 kg</div><div class="met-s">IMC 26.0</div></div>
+    <div class="met"><div class="met-l">Masse à gagner</div><div class="met-v">+13 kg</div><div class="met-s">Muscle principalement</div></div>
+    <div class="met"><div class="met-l">Durée estimée</div><div class="met-v">18–24 mois</div><div class="met-s">Progression naturelle</div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge bt">Ce que ça signifie concrètement</span>
+    <div class="dr"><div class="dl">Vitesse réaliste</div><div class="dc">Une femme peut gagner 0.5 à 1 kg de muscle pur par mois au maximum. +13 kg = environ 18 à 24 mois de travail sérieux.</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Surplus calorique</div><div class="dc">Contrairement à la perte de poids, ici il faut MANGER PLUS. Sans surplus calorique, le muscle ne peut pas se construire.</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Le cardio</div><div class="dc">Réduit au strict minimum (1x / semaine). Trop de cardio brûle les calories dont tu as besoin pour construire du muscle.</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Résultat visuel</div><div class="dc">Corps athlétique, musclé et féminin — épaules rondes, fessiers volumineux, cuisses galbées. Pas un corps masculin : les femmes n'ont pas assez de testostérone pour ça.</div></div>
+  </div>
+
+  <div class="tip">À 75 kg pour 170 cm, tu auras un IMC de 26 — légèrement au-dessus de la "norme" mais avec une masse musculaire élevée, ce qui est parfaitement sain et très esthétique.</div>
+
+  <div class="section" aria-label="Offre sur-mesure (Objectif)">
+    <div class="sur-cta">
+      <div class="sur-k"><span class="sur-dot" aria-hidden="true"></span>Offre sur‑mesure</div>
+      <div class="sur-t">Prête à passer au niveau supérieur ?</div>
+      <div class="sur-p">Je crée ton plan personnalisé (entraînement + nutrition) selon ton objectif, ton niveau et ton matériel. Tu remplis le formulaire, puis je te réponds avec la meilleure stratégie.</div>
+      <div class="cta-row">
+        <a class="btn-send" href="formulaire.html">Remplir le formulaire ↗</a>
+        <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+          <span class="contact-dot dot-ig" aria-hidden="true"></span>
+          DM Instagram
+        </a>
+        <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+          <span class="contact-dot dot-mail" aria-hidden="true"></span>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="s-nutri">
+  <div class="row">
+    <div class="met"><div class="met-l">Calories / jour</div><div class="met-v">2 350 kcal</div><div class="met-s">Surplus +300 kcal</div></div>
+    <div class="met"><div class="met-l">Protéines / jour</div><div class="met-v">140 g</div><div class="met-s">2.2 g × 62 kg</div></div>
+    <div class="met"><div class="met-l">Eau / jour</div><div class="met-v">2.5–3 L</div><div class="met-s">Essentiel pour la synthèse</div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge bt">Répartition des macros — 2 350 kcal/jour</span>
+    <div class="macro-bar">
+      <div class="macro-label"><span>Protéines — 140 g</span><span style="color:var(--color-text-secondary)">24%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:24%;background:#534AB7"></div></div>
+    </div>
+    <div class="macro-bar">
+      <div class="macro-label"><span>Glucides — 270 g</span><span style="color:var(--color-text-secondary)">46%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:46%;background:#1D9E75"></div></div>
+    </div>
+    <div class="macro-bar">
+      <div class="macro-label"><span>Lipides — 78 g</span><span style="color:var(--color-text-secondary)">30%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:30%;background:#EF9F27"></div></div>
+    </div>
+    <div class="warn" style="margin-top:10px">Les glucides sont tes alliés en prise de masse — ils alimentent tes séances et déclenchent l'insuline, hormone anabolisante naturelle. Ne les supprime jamais.</div>
+  </div>
+
+  <div class="card">
+    <span class="badge bg">Journée type — 2 350 kcal</span>
+    <div class="dr"><div class="dl">7h — Petit-déjeuner</div><div class="dc">100 g flocons d'avoine + 200 g yaourt grec + 1 banane + 30 g beurre de cacahuète + thé<div class="ds">~680 kcal · 35 g protéines</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">10h — Collation</div><div class="dc">2 tranches pain complet + 4 œufs brouillés + fromage frais<div class="ds">~420 kcal · 32 g protéines</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">13h — Déjeuner</div><div class="dc">150 g poulet + 120 g riz complet + légumes sautés + huile olive<div class="ds">~580 kcal · 42 g protéines</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">16h30 — Pre-workout</div><div class="dc">1 banane + 30 g whey protéine<div class="ds">~230 kcal · 25 g protéines</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">20h — Dîner</div><div class="dc">150 g saumon + 200 g patate douce + brocolis + 1 c.s. huile olive<div class="ds">~550 kcal · 38 g protéines</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">22h — Avant dodo</div><div class="dc">200 g fromage blanc 0% ou 20 g caséine<div class="ds">~120 kcal · 22 g protéines — synthèse la nuit</div></div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge ba">Compléments recommandés</span>
+    <div class="dr"><div class="dl">Whey protéine</div><div class="dc">30 g post-entraînement — aide à atteindre les 140 g de protéines quotidiens</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Créatine</div><div class="dc">5 g/jour — le complément le plus étudié et efficace pour la force et la masse. Totalement sûr pour les femmes.</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Oméga-3</div><div class="dc">2-3 g/jour — réduit l'inflammation post-séance, améliore la récupération</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Magnésium</div><div class="dc">300 mg le soir — qualité de sommeil = qualité de récupération musculaire</div></div>
+  </div>
+
+  <div class="section" aria-label="Offre sur-mesure (Nutrition)">
+    <div class="sur-cta">
+      <div class="sur-k"><span class="sur-dot" aria-hidden="true"></span>Offre sur‑mesure</div>
+      <div class="sur-t">Menus & macros adaptés à toi</div>
+      <div class="sur-p">Tu veux un plan nutrition 100% personnalisé (calories, macros, menus, préférences, contraintes) ? Remplis le formulaire et je te propose une stratégie claire.</div>
+      <div class="cta-row">
+        <a class="btn-send" href="formulaire.html">Remplir le formulaire ↗</a>
+        <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+          <span class="contact-dot dot-ig" aria-hidden="true"></span>
+          DM Instagram
+        </a>
+        <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+          <span class="contact-dot dot-mail" aria-hidden="true"></span>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="s-sport">
+  <div class="tip">En prise de masse, l'entraînement devient la priorité absolue. Chaque séance doit être intense et progressive. Le principe clé : surcharge progressive — augmenter les charges ou les reps chaque semaine.</div>
+
+  <div class="card">
+    <span class="badge bt">Séance A — Jambes & Fessiers (lourd)</span>
+    <div class="dr"><div class="dl">Squat barre</div><div class="dc">5 séries × 5 reps — charges lourdes, technique parfaite<div class="ds">L'exercice roi de la prise de masse basse</div></div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Hip thrust chargé</div><div class="dc">4 séries × 8 reps — charge progressive chaque semaine</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Leg press</div><div class="dc">4 séries × 10 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Romanian deadlift</div><div class="dc">3 séries × 10 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Mollets debout</div><div class="dc">4 séries × 15 reps</div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge bp">Séance B — Dos & Biceps</span>
+    <div class="dr"><div class="dl">Traction assistée</div><div class="dc">4 séries × 6–8 reps — objectif : tractions libres à 3 mois</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Rowing barre</div><div class="dc">4 séries × 8 reps — dos épais et large</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Tirage poulie haute</div><div class="dc">3 séries × 12 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Curl haltères</div><div class="dc">3 séries × 12 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Face pull</div><div class="dc">3 séries × 15 reps — santé des épaules</div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge ba">Séance C — Poitrine, Épaules & Triceps</span>
+    <div class="dr"><div class="dl">Développé couché</div><div class="dc">4 séries × 8 reps — haltères ou barre</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Développé militaire</div><div class="dc">4 séries × 8 reps — épaules larges et rondes</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Élévations latérales</div><div class="dc">3 séries × 15 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Dips assistés</div><div class="dc">3 séries × 10 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Écarté haltères</div><div class="dc">3 séries × 12 reps</div></div>
+  </div>
+
+  <div class="card">
+    <span class="badge bg">Séance D — Jambes volume (modéré)</span>
+    <div class="dr"><div class="dl">Fentes bulgares</div><div class="dc">4 séries × 10 reps / jambe</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Leg curl couché</div><div class="dc">4 séries × 12 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Goblet squat</div><div class="dc">3 séries × 15 reps</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Abducteurs machine</div><div class="dc">3 séries × 20 reps — hanche large et galbe</div></div>
+    <div class="sep"></div>
+    <div class="dr"><div class="dl">Gainage + abdos</div><div class="dc">3 × 45 sec planche + 3 × 15 crunchs</div></div>
+  </div>
+
+  <div class="section" aria-label="Offre sur-mesure (Entraînement)">
+    <div class="sur-cta">
+      <div class="sur-k"><span class="sur-dot" aria-hidden="true"></span>Offre sur‑mesure</div>
+      <div class="sur-t">Programme d’entraînement personnalisé</div>
+      <div class="sur-p">Un programme construit pour ton objectif (fessiers, jambes, épaules…), ton niveau et ton matériel, avec progression semaine après semaine.</div>
+      <div class="cta-row">
+        <a class="btn-send" href="formulaire.html">Remplir le formulaire ↗</a>
+        <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+          <span class="contact-dot dot-ig" aria-hidden="true"></span>
+          DM Instagram
+        </a>
+        <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+          <span class="contact-dot dot-mail" aria-hidden="true"></span>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="s-planning">
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Lundi</span><span class="day-type" style="background:#EEEDFE;color:#3C3489">Séance A — Jambes lourdes</span></div>
+    <div class="pill-row"><span class="pill">Squat barre</span><span class="pill">Hip thrust</span><span class="pill">Leg press</span><span class="pill">RDL</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Mardi</span><span class="day-type" style="background:#FBEAF0;color:#72243E">Séance B — Dos & Biceps</span></div>
+    <div class="pill-row"><span class="pill">Tractions</span><span class="pill">Rowing</span><span class="pill">Tirage poulie</span><span class="pill">Curl</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Mercredi</span><span class="day-type" style="background:#F1EFE8;color:#5F5E5A">Repos actif</span></div>
+    <div class="pill-row"><span class="pill">Marche 20 min</span><span class="pill">Stretching</span><span class="pill">Manger bien ++</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Jeudi</span><span class="day-type" style="background:#FAEEDA;color:#854F0B">Séance C — Poitrine & Épaules</span></div>
+    <div class="pill-row"><span class="pill">Développé couché</span><span class="pill">Militaire</span><span class="pill">Élévations</span><span class="pill">Dips</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Vendredi</span><span class="day-type" style="background:#E1F5EE;color:#085041">Séance D — Jambes volume</span></div>
+    <div class="pill-row"><span class="pill">Fentes</span><span class="pill">Leg curl</span><span class="pill">Abducteurs</span><span class="pill">Abdos</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Samedi</span><span class="day-type" style="background:#F1EFE8;color:#5F5E5A">Repos ou cardio léger</span></div>
+    <div class="pill-row"><span class="pill">30 min vélo tranquille</span><span class="pill">Ou repos complet</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-hd"><span class="day-name">Dimanche</span><span class="day-type" style="background:#F1EFE8;color:#5F5E5A">Repos complet</span></div>
+    <div class="pill-row"><span class="pill">Récupération</span><span class="pill">Repas copieux</span><span class="pill">Sommeil ++</span></div>
+  </div>
+  <div class="warn" style="margin-top:4px">Le repos est aussi important que l'entraînement. Le muscle se construit PENDANT la récupération, pas pendant la séance.</div>
+
+  <div class="section" aria-label="Offre sur-mesure (Planning)">
+    <div class="sur-cta">
+      <div class="sur-k"><span class="sur-dot" aria-hidden="true"></span>Offre sur‑mesure</div>
+      <div class="sur-t">Planning adapté à ton emploi du temps</div>
+      <div class="sur-p">Tu veux un planning réaliste (2–6 séances/semaine) selon ton rythme de vie et ta récupération ? Remplis le formulaire et je te propose le meilleur split.</div>
+      <div class="cta-row">
+        <a class="btn-send" href="formulaire.html">Remplir le formulaire ↗</a>
+        <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+          <span class="contact-dot dot-ig" aria-hidden="true"></span>
+          DM Instagram
+        </a>
+        <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+          <span class="contact-dot dot-mail" aria-hidden="true"></span>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="s-phases">
+  <div class="phase-block" style="border-color:#9FE1CB">
+    <div class="phase-head" style="background:#E1F5EE">
+      <span class="phase-title" style="color:#085041">Phase 1 — Fondations (mois 1–3)</span>
+      <span style="font-size:12px;color:#0F6E56">+1 à +2 kg</span>
+    </div>
+    <div class="phase-body" style="padding-top:10px">
+      <div class="prog-item"><div class="prog-dot" style="background:#1D9E75"></div><div class="prog-txt">Apprentissage des mouvements de base (squat, soulevé, développé)</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#1D9E75"></div><div class="prog-txt">Mise en place de la nutrition — atteindre les 140 g de protéines/jour</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#1D9E75"></div><div class="prog-txt">Gains de force rapides (neuronaux) — tu vas doubler tes charges en 8 semaines</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#1D9E75"></div><div class="prog-txt">Corps légèrement plus ferme et plein, prise de poids modérée</div></div>
+    </div>
+  </div>
+
+  <div class="phase-block" style="border-color:#AFA9EC">
+    <div class="phase-head" style="background:#EEEDFE">
+      <span class="phase-title" style="color:#3C3489">Phase 2 — Construction (mois 4–9)</span>
+      <span style="font-size:12px;color:#534AB7">+4 à +6 kg</span>
+    </div>
+    <div class="phase-body" style="padding-top:10px">
+      <div class="prog-item"><div class="prog-dot" style="background:#534AB7"></div><div class="prog-txt">Hypertrophie réelle — les muscles grossissent visiblement</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#534AB7"></div><div class="prog-txt">Épaules rondes, fessiers volumineux, dos large commencent à apparaître</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#534AB7"></div><div class="prog-txt">Charges en musculation doublées voire triplées vs départ</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#534AB7"></div><div class="prog-txt">Appétit augmenté — c'est un bon signe, manger en conséquence</div></div>
+    </div>
+  </div>
+
+  <div class="phase-block" style="border-color:#FAC775">
+    <div class="phase-head" style="background:#FAEEDA">
+      <span class="phase-title" style="color:#854F0B">Phase 3 — Consolidation (mois 10–15)</span>
+      <span style="font-size:12px;color:#854F0B">+5 à +7 kg</span>
+    </div>
+    <div class="phase-body" style="padding-top:10px">
+      <div class="prog-item"><div class="prog-dot" style="background:#BA7517"></div><div class="prog-txt">Atteinte des 68–70 kg — corps athlétique très visible</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#BA7517"></div><div class="prog-txt">Phase de "mini-cut" possible (4–6 semaines) pour affiner sans perdre le muscle</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#BA7517"></div><div class="prog-txt">Entraînement plus spécialisé selon tes points faibles</div></div>
+    </div>
+  </div>
+
+  <div class="phase-block" style="border-color:#ED93B1">
+    <div class="phase-head" style="background:#FBEAF0">
+      <span class="phase-title" style="color:#72243E">Phase 4 — Objectif 75 kg (mois 16–24)</span>
+      <span style="font-size:12px;color:#993556">+3 à +4 kg</span>
+    </div>
+    <div class="phase-body" style="padding-top:10px">
+      <div class="prog-item"><div class="prog-dot" style="background:#D4537E"></div><div class="prog-txt">Corps de compétition — silhouette musclée et féminine très marquée</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#D4537E"></div><div class="prog-txt">75 kg avec 170 cm = physique de fitness / athlétisme très développé</div></div>
+      <div class="prog-item"><div class="prog-dot" style="background:#D4537E"></div><div class="prog-txt">Ajustements fins de nutrition et programme selon plateaux</div></div>
+    </div>
+  </div>
+
+  <div class="section" aria-label="Offre sur-mesure (Phases)">
+    <div class="sur-cta">
+      <div class="sur-k"><span class="sur-dot" aria-hidden="true"></span>Offre sur‑mesure</div>
+      <div class="sur-t">On adapte selon tes plateaux</div>
+      <div class="sur-p">Chaque corps réagit différemment. Je t’aide à ajuster nutrition + entraînement pour continuer à progresser sans te cramer.</div>
+      <div class="cta-row">
+        <a class="btn-send" href="formulaire.html">Remplir le formulaire ↗</a>
+        <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+          <span class="contact-dot dot-ig" aria-hidden="true"></span>
+          DM Instagram
+        </a>
+        <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+          <span class="contact-dot dot-mail" aria-hidden="true"></span>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="footer-note"><strong style="color:var(--text)">Programmes personnalisés sur-mesure</strong> — contacts.</div>
+    <div class="footer-contacts" aria-label="Contacts">
+      <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+        <span class="contact-dot dot-ig" aria-hidden="true"></span>
+        @getfit_with_gamma
+      </a>
+      <a class="contact-pill" href="mailto:getfit.with.gamma@gmail.com?subject=Programme%20personnalis%C3%A9%20sur-mesure">
+        <span class="contact-dot dot-mail" aria-hidden="true"></span>
+        getfit.with.gamma@gmail.com
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="sticky-cta" aria-label="Demander programme (mobile)">
+  <div class="sticky-cta-inner">
+    <div class="sticky-cta-txt"><strong style="color:var(--text)">Programme sur‑mesure</strong><br/>Demande en 30 secondes</div>
+    <div class="sticky-cta-actions">
+      <a class="contact-pill" href="https://instagram.com/getfit_with_gamma" target="_blank" rel="noopener noreferrer">
+        <span class="contact-dot dot-ig" aria-hidden="true"></span>
+        DM
+      </a>
+      <a class="btn-send" href="formulaire.html">Demander ↗</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('on');
+  btn.classList.add('active');
+}
+</script>
